@@ -1,0 +1,183 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Polyethylene Weight Calculator</title>
+    <meta name="description" content="Mobile-friendly calculators for polyethylene bags, sheeting, tubing, pallet covers, and drum liners.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="apple-touch-icon" href="icon.png">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body>
+    <main class="app">
+      <header class="app-header">
+        <h1>Polyethylene Weight Calculator</h1>
+        <p>Mobile calculators for bags, sheeting, tubing, pallet covers, and drum liners.</p>
+      </header>
+
+      <nav class="tab-nav" aria-label="Calculator tabs">
+        <button class="tab active" data-tab="general">General</button>
+        <button class="tab" data-tab="bags">Bags</button>
+        <button class="tab" data-tab="sheeting">Sheeting</button>
+        <button class="tab" data-tab="tubing">Tubing</button>
+        <button class="tab" data-tab="pallet">Pallet Cover</button>
+        <button class="tab" data-tab="drum">Drum Liner</button>
+        <button class="tab" data-tab="conversions">Conversions</button>
+      </nav>
+
+      <section class="panel active" id="panel-general">
+        <h2>General Calculator</h2>
+        <p class="hint">Use this when you know dimensions (L/W/H), gauge, and either count per roll/case or overhang.</p>
+        <div class="grid">
+          <label>Product Type
+            <select id="generalType">
+              <option value="bags">Bag</option>
+              <option value="sheeting">Sheeting roll</option>
+              <option value="tubing">Tubing roll</option>
+              <option value="pallet">Pallet cover</option>
+              <option value="drum">Drum liner</option>
+            </select>
+          </label>
+          <label>Length (in)
+            <input id="gLength" type="number" inputmode="decimal" value="64">
+          </label>
+          <label>Width (in)
+            <input id="gWidth" type="number" inputmode="decimal" value="38">
+          </label>
+          <label>Height (in)
+            <input id="gHeight" type="number" inputmode="decimal" value="60">
+          </label>
+          <label>Diameter (in)
+            <input id="gDiameter" type="number" inputmode="decimal" value="24">
+          </label>
+          <label>Gauge Input
+            <input id="gGauge" type="number" inputmode="decimal" value="3">
+          </label>
+          <label>Gauge Unit
+            <select id="gGaugeUnit">
+              <option value="mil">mil</option>
+              <option value="decimal">decimal inch</option>
+              <option value="microns">microns</option>
+            </select>
+          </label>
+          <label>Footage (ft)
+            <input id="gFootage" type="number" inputmode="decimal" value="400">
+          </label>
+          <label>Count per roll/case
+            <input id="gCount" type="number" inputmode="decimal" value="100">
+          </label>
+          <label>Overhang (in)
+            <input id="gOverhang" type="number" inputmode="decimal" value="6">
+          </label>
+        </div>
+        <div class="results" id="generalResults"></div>
+      </section>
+
+      <section class="panel" id="panel-bags">
+        <h2>Bags Calculator</h2>
+        <div class="grid">
+          <label>Width (in)<input id="bWidth" type="number" value="38"></label>
+          <label>Length (in)<input id="bLength" type="number" value="64"></label>
+          <label>Gauge Input<input id="bGauge" type="number" value="0.003"></label>
+          <label>Gauge Unit
+            <select id="bGaugeUnit">
+              <option value="decimal">decimal inch</option>
+              <option value="mil">mil</option>
+              <option value="microns">microns</option>
+            </select>
+          </label>
+          <label>Count per roll (optional)<input id="bCount" type="number" value="100"></label>
+        </div>
+        <div class="results" id="bagResults"></div>
+      </section>
+
+      <section class="panel" id="panel-sheeting">
+        <h2>Sheeting Calculator</h2>
+        <div class="grid">
+          <label>Width (in)<input id="sWidth" type="number" value="144"></label>
+          <label>Footage (ft)<input id="sFootage" type="number" value="400"></label>
+          <label>Gauge Input<input id="sGauge" type="number" value="1"></label>
+          <label>Gauge Unit
+            <select id="sGaugeUnit">
+              <option value="mil">mil</option>
+              <option value="decimal">decimal inch</option>
+              <option value="microns">microns</option>
+            </select>
+          </label>
+        </div>
+        <div class="results" id="sheetingResults"></div>
+      </section>
+
+      <section class="panel" id="panel-tubing">
+        <h2>Tubing Calculator</h2>
+        <div class="grid">
+          <label>Width (in)<input id="tWidth" type="number" value="36"></label>
+          <label>Footage (ft)<input id="tFootage" type="number" value="800"></label>
+          <label>Gauge Input<input id="tGauge" type="number" value="3"></label>
+          <label>Gauge Unit
+            <select id="tGaugeUnit">
+              <option value="mil">mil</option>
+              <option value="decimal">decimal inch</option>
+              <option value="microns">microns</option>
+            </select>
+          </label>
+        </div>
+        <div class="results" id="tubingResults"></div>
+      </section>
+
+      <section class="panel" id="panel-pallet">
+        <h2>Pallet Cover Calculator</h2>
+        <div class="grid">
+          <label>Pallet Length (in)<input id="pLength" type="number" value="48"></label>
+          <label>Pallet Width (in)<input id="pWidth" type="number" value="40"></label>
+          <label>Pallet Height (in)<input id="pHeight" type="number" value="60"></label>
+          <label>Overhang (in)<input id="pOverhang" type="number" value="6"></label>
+          <label>Gauge Input<input id="pGauge" type="number" value="2"></label>
+          <label>Gauge Unit
+            <select id="pGaugeUnit">
+              <option value="mil">mil</option>
+              <option value="decimal">decimal inch</option>
+              <option value="microns">microns</option>
+            </select>
+          </label>
+        </div>
+        <div class="results" id="palletResults"></div>
+      </section>
+
+      <section class="panel" id="panel-drum">
+        <h2>Drum Liner Calculator</h2>
+        <div class="grid">
+          <label>Drum Diameter (in)<input id="dDiameter" type="number" value="24"></label>
+          <label>Drum Height (in)<input id="dHeight" type="number" value="40"></label>
+          <label>Overhang (in)<input id="dOverhang" type="number" value="6"></label>
+          <label>Gauge Input<input id="dGauge" type="number" value="2"></label>
+          <label>Gauge Unit
+            <select id="dGaugeUnit">
+              <option value="mil">mil</option>
+              <option value="decimal">decimal inch</option>
+              <option value="microns">microns</option>
+            </select>
+          </label>
+        </div>
+        <div class="results" id="drumResults"></div>
+      </section>
+
+      <section class="panel" id="panel-conversions">
+        <h2>Gauge Conversions</h2>
+        <div class="grid">
+          <label>Microns<input id="cMicrons" type="number" value="12"></label>
+          <label>Mils<input id="cMils" type="number" value="0.47"></label>
+          <label>Decimal inches<input id="cDecimal" type="number" value="0.003"></label>
+        </div>
+        <div class="results" id="conversionResults"></div>
+      </section>
+    </main>
+
+    <script src="js/vendor/modernizr-3.5.0.min.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>
