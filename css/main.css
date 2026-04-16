@@ -1,0 +1,137 @@
+:root {
+  --bg: #f3f6fb;
+  --card: #ffffff;
+  --ink: #0e1c2e;
+  --muted: #48607b;
+  --accent: #1f4f82;
+  --accent-soft: #dce9f7;
+  --border: #d4deea;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 12px;
+}
+
+.app-header {
+  background: var(--accent);
+  color: #fff;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.app-header p {
+  margin: 8px 0 0;
+  font-size: 0.9rem;
+}
+
+.tab-nav {
+  margin: 12px 0;
+  display: flex;
+  overflow-x: auto;
+  gap: 8px;
+  padding-bottom: 2px;
+}
+
+.tab {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--accent);
+  padding: 8px 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.tab.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.panel {
+  display: none;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.panel.active {
+  display: block;
+}
+
+.panel h2 {
+  margin-top: 0;
+  font-size: 1.1rem;
+}
+
+.hint {
+  color: var(--muted);
+  margin-top: -4px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+input,
+select {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.results {
+  margin-top: 12px;
+  background: var(--accent-soft);
+  border-radius: 10px;
+  padding: 10px;
+  display: grid;
+  gap: 6px;
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.95rem;
+}
+
+.result-row strong {
+  text-align: right;
+}
+
+@media (min-width: 680px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
