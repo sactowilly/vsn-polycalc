@@ -1,4 +1,3 @@
-//wz
 (function () {
   function toNumber(value) {
     const parsed = parseFloat(value);
