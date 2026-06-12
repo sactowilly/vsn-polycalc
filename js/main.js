@@ -196,19 +196,15 @@
 
     if (changedField === 'microns') {
       gauge = gaugeParts(micronsInput.value, 'microns');
-      milsInput.value = fmt(gauge.mil, 4);
-      decimalInput.value = fmt(gauge.decimalIn, 6);
     } else if (changedField === 'decimal') {
       gauge = gaugeParts(decimalInput.value, 'decimal');
-      milsInput.value = fmt(gauge.mil, 4);
-      micronsInput.value = fmt(gauge.microns, 2);
-    } else if (changedField === 'mils') {
-      gauge = gaugeParts(milsInput.value, 'mil');
-      micronsInput.value = fmt(gauge.microns, 2);
-      decimalInput.value = fmt(gauge.decimalIn, 6);
     } else {
       gauge = gaugeParts(milsInput.value, 'mil');
     }
+
+    micronsInput.value = fmt(gauge.microns, 2);
+    milsInput.value = fmt(gauge.mil, 4);
+    decimalInput.value = fmt(gauge.decimalIn, 6);
 
     writeResults(document.getElementById('conversionResults'), [
       { label: 'Microns → mils', value: 'mils = microns ÷ 25.4' },
@@ -316,7 +312,7 @@
           renderConversions('microns');
         } else if (id === 'cDecimal') {
           renderConversions('decimal');
-        } else if (id === 'cMils') {
+        } else {
           renderConversions('mils');
         }
       });
