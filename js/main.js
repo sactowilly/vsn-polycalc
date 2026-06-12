@@ -1,331 +1,266 @@
 (function () {
-  function toNumber(value) {
-    const parsed = parseFloat(value);
-    return Number.isFinite(parsed) ? parsed : 0;
-  }
+  const formulas = window.PolycalcFormulas;
 
-  function gaugeParts(input, unit) {
-    const raw = toNumber(input);
-
-    if (unit === 'decimal') {
-      return { mil: raw * 1000, decimalIn: raw, microns: raw * 25400 };
-    }
-
-    if (unit === 'microns') {
-      const mil = raw / 25.4;
-      return { mil, decimalIn: mil / 1000, microns: raw };
-    }
-
-    return { mil: raw, decimalIn: raw / 1000, microns: raw * 25.4 };
+  function byId(id) {
+    return document.getElementById(id);
   }
 
   function fmt(value, digits) {
-    return Number(value).toFixed(digits);
-  }
-
-  function writeResults(target, rows) {
-    target.innerHTML = rows
-      .map(function (row) {
-        return '<div class="result-row"><span>' + row.label + '</span><strong>' + row.value + '</strong></div>';
-      })
-      .join('');
-  }
-
-  function bagsCalc(width, length, gaugeInput, gaugeUnit, count) {
-    const g = gaugeParts(gaugeInput, gaugeUnit);
-    const perBag = (width * length * g.decimalIn) / 15;
-
-    return {
-      gaugeMil: g.mil,
-      gaugeDecimalIn: g.decimalIn,
-      weightPerBag: perBag,
-      weightPer1000: perBag * 1000,
-      weightPerRoll: perBag * count
-    };
-  }
-
-  function sheetingCalc(width, footage, gaugeInput, gaugeUnit) {
-    const g = gaugeParts(gaugeInput, gaugeUnit);
-    const per1000 = (width * 12 * g.mil) / 30;
-    return {
-      gaugeMil: g.mil,
-      gaugeDecimalIn: g.decimalIn,
-      weightPer1000: per1000,
-      weightPerFt: per1000 / 1000,
-      weightPerRoll: per1000 * (footage / 1000)
-    };
-  }
-
-  function tubingCalc(width, footage, gaugeInput, gaugeUnit) {
-    const g = gaugeParts(gaugeInput, gaugeUnit);
-    const per1000 = (width * 12 * g.mil) / 15;
-    return {
-      gaugeMil: g.mil,
-      gaugeDecimalIn: g.decimalIn,
-      weightPer1000: per1000,
-      weightPerFt: per1000 / 1000,
-      weightPerRoll: per1000 * (footage / 1000)
-    };
-  }
-
-  function palletCalc(length, width, height, overhang, gaugeInput, gaugeUnit) {
-    const g = gaugeParts(gaugeInput, gaugeUnit);
-    const bagWidth = length + width + 4;
-    const bagLength = height + (width / 2) + overhang;
-    const perBag = (bagWidth * bagLength * g.decimalIn) / 15;
-
-    return {
-      bagWidth,
-      bagLength,
-      gaugeDecimalIn: g.decimalIn,
-      weightPerBag: perBag,
-      weightPer1000: perBag * 1000
-    };
-  }
-
-  function drumCalc(diameter, height, overhang, gaugeInput, gaugeUnit) {
-    const g = gaugeParts(gaugeInput, gaugeUnit);
-    const bagWidth = diameter * 3.14 + 4;
-    const bagLength = height + diameter + overhang;
-    const perBag = (bagWidth * bagLength * g.decimalIn) / 15;
-
-    return {
-      bagWidth,
-      bagLength,
-      gaugeDecimalIn: g.decimalIn,
-      weightPerBag: perBag,
-      weightPer1000: perBag * 1000
-    };
-  }
-
-  function renderBags() {
-    const result = bagsCalc(
-      toNumber(document.getElementById('bWidth').value),
-      toNumber(document.getElementById('bLength').value),
-      document.getElementById('bGauge').value,
-      document.getElementById('bGaugeUnit').value,
-      toNumber(document.getElementById('bCount').value)
-    );
-
-    writeResults(document.getElementById('bagResults'), [
-      { label: 'Gauge (mil)', value: fmt(result.gaugeMil, 4) },
-      { label: 'Gauge (decimal in)', value: fmt(result.gaugeDecimalIn, 6) },
-      { label: 'Weight per bag (lb)', value: fmt(result.weightPerBag, 4) },
-      { label: 'Weight per 1,000 bags (lb)', value: fmt(result.weightPer1000, 4) },
-      { label: 'Weight per roll/case (lb)', value: fmt(result.weightPerRoll, 4) }
-    ]);
-  }
-
-  function renderSheeting() {
-    const result = sheetingCalc(
-      toNumber(document.getElementById('sWidth').value),
-      toNumber(document.getElementById('sFootage').value),
-      document.getElementById('sGauge').value,
-      document.getElementById('sGaugeUnit').value
-    );
-
-    writeResults(document.getElementById('sheetingResults'), [
-      { label: 'Gauge (mil)', value: fmt(result.gaugeMil, 4) },
-      { label: 'Gauge (decimal in)', value: fmt(result.gaugeDecimalIn, 6) },
-      { label: 'Weight per 1,000 ft (lb)', value: fmt(result.weightPer1000, 4) },
-      { label: 'Weight per ft (lb)', value: fmt(result.weightPerFt, 4) },
-      { label: 'Weight per roll (lb)', value: fmt(result.weightPerRoll, 4) }
-    ]);
-  }
-
-  function renderTubing() {
-    const result = tubingCalc(
-      toNumber(document.getElementById('tWidth').value),
-      toNumber(document.getElementById('tFootage').value),
-      document.getElementById('tGauge').value,
-      document.getElementById('tGaugeUnit').value
-    );
-
-    writeResults(document.getElementById('tubingResults'), [
-      { label: 'Gauge (mil)', value: fmt(result.gaugeMil, 4) },
-      { label: 'Gauge (decimal in)', value: fmt(result.gaugeDecimalIn, 6) },
-      { label: 'Weight per 1,000 ft (lb)', value: fmt(result.weightPer1000, 4) },
-      { label: 'Weight per ft (lb)', value: fmt(result.weightPerFt, 4) },
-      { label: 'Weight per roll (lb)', value: fmt(result.weightPerRoll, 4) }
-    ]);
-  }
-
-  function renderPallet() {
-    const result = palletCalc(
-      toNumber(document.getElementById('pLength').value),
-      toNumber(document.getElementById('pWidth').value),
-      toNumber(document.getElementById('pHeight').value),
-      toNumber(document.getElementById('pOverhang').value),
-      document.getElementById('pGauge').value,
-      document.getElementById('pGaugeUnit').value
-    );
-
-    writeResults(document.getElementById('palletResults'), [
-      { label: 'Bag width (in)', value: fmt(result.bagWidth, 2) },
-      { label: 'Bag length (in)', value: fmt(result.bagLength, 2) },
-      { label: 'Gauge (decimal in)', value: fmt(result.gaugeDecimalIn, 6) },
-      { label: 'Weight per bag (lb)', value: fmt(result.weightPerBag, 4) },
-      { label: 'Weight per 1,000 bags (lb)', value: fmt(result.weightPer1000, 4) }
-    ]);
-  }
-
-  function renderDrum() {
-    const result = drumCalc(
-      toNumber(document.getElementById('dDiameter').value),
-      toNumber(document.getElementById('dHeight').value),
-      toNumber(document.getElementById('dOverhang').value),
-      document.getElementById('dGauge').value,
-      document.getElementById('dGaugeUnit').value
-    );
-
-    writeResults(document.getElementById('drumResults'), [
-      { label: 'Bag width (in)', value: fmt(result.bagWidth, 2) },
-      { label: 'Bag length (in)', value: fmt(result.bagLength, 2) },
-      { label: 'Gauge (decimal in)', value: fmt(result.gaugeDecimalIn, 6) },
-      { label: 'Weight per bag (lb)', value: fmt(result.weightPerBag, 4) },
-      { label: 'Weight per 1,000 bags (lb)', value: fmt(result.weightPer1000, 4) }
-    ]);
-  }
-
-  function renderConversions(changedField) {
-    const micronsInput = document.getElementById('cMicrons');
-    const milsInput = document.getElementById('cMils');
-    const decimalInput = document.getElementById('cDecimal');
-
-    let gauge;
-
-    if (changedField === 'microns') {
-      gauge = gaugeParts(micronsInput.value, 'microns');
-    } else if (changedField === 'decimal') {
-      gauge = gaugeParts(decimalInput.value, 'decimal');
-    } else {
-      gauge = gaugeParts(milsInput.value, 'mil');
+    if (typeof value !== 'number' || !Number.isFinite(value)) {
+      return String(value);
     }
-
-    micronsInput.value = fmt(gauge.microns, 2);
-    milsInput.value = fmt(gauge.mil, 4);
-    decimalInput.value = fmt(gauge.decimalIn, 6);
-
-    writeResults(document.getElementById('conversionResults'), [
-      { label: 'Microns → mils', value: 'mils = microns ÷ 25.4' },
-      { label: 'Mils → microns', value: 'microns = mils × 25.4' },
-      { label: 'Mils → decimal inches', value: 'decimal in = mils ÷ 1000' },
-      { label: 'Decimal inches → mils', value: 'mils = decimal in × 1000' }
-    ]);
+    return value.toFixed(digits);
   }
 
-  function renderGeneral() {
-    const type = document.getElementById('generalType').value;
-    const gaugeInput = document.getElementById('gGauge').value;
-    const gaugeUnit = document.getElementById('gGaugeUnit').value;
+  const railButtons = Array.from(document.querySelectorAll('.product-link'));
+  const panels = Array.from(document.querySelectorAll('.panel'));
+  const activeResults = byId('activeResults');
+  const activeAssumptions = byId('activeAssumptions');
+  const resultKicker = byId('resultKicker');
+  const resultTitle = byId('resultTitle');
+  const standardsNote = byId('standardsNote');
 
-    const width = toNumber(document.getElementById('gWidth').value);
-    const length = toNumber(document.getElementById('gLength').value);
-    const height = toNumber(document.getElementById('gHeight').value);
-    const diameter = toNumber(document.getElementById('gDiameter').value);
-    const footage = toNumber(document.getElementById('gFootage').value);
-    const count = toNumber(document.getElementById('gCount').value);
-    const overhang = toNumber(document.getElementById('gOverhang').value);
+  const NOTES = {
+    general: 'Use General for rapid quoting comparisons. Switch to the product-specific screen when you need a tighter readout or a customer-facing explanation.',
+    bags: 'Bag weight is theoretical film only. If seals, venting, or additive packages materially change weight, move to Custom density or add a quoting adjustment outside the calculator.',
+    sheeting: 'Sheeting is modeled as a single-ply web. Pounds per 1,000 ft are surfaced for compatibility with traditional film yield references.',
+    tubing: 'Tubing uses a double-wall layflat model. Pounds per 1,000 ft make it easy to compare against shorthand market calculators.',
+    pallet: 'Derived bag dimensions are surfaced before the weight result because geometry mistakes are more common than density mistakes on pallet cover quotes.',
+    drum: 'Drum liners derive bag width from circumference and bag length from height plus radius. Validate the derived dimensions against the actual liner style when quoting specialty tops.',
+    conversions: 'Use conversions as a reference tool. Production weight calculations elsewhere in the app always use converted decimal-inch thickness internally.'
+  };
 
-    let rows = [];
-
-    if (type === 'sheeting') {
-      const result = sheetingCalc(width, footage, gaugeInput, gaugeUnit);
-      rows = [
-        { label: 'Gauge (mil)', value: fmt(result.gaugeMil, 4) },
-        { label: 'Gauge (decimal in)', value: fmt(result.gaugeDecimalIn, 6) },
-        { label: 'Weight per 1,000 ft (lb)', value: fmt(result.weightPer1000, 4) },
-        { label: 'Weight per roll (lb)', value: fmt(result.weightPerRoll, 4) }
-      ];
-    } else if (type === 'tubing') {
-      const result = tubingCalc(width, footage, gaugeInput, gaugeUnit);
-      rows = [
-        { label: 'Gauge (mil)', value: fmt(result.gaugeMil, 4) },
-        { label: 'Gauge (decimal in)', value: fmt(result.gaugeDecimalIn, 6) },
-        { label: 'Weight per 1,000 ft (lb)', value: fmt(result.weightPer1000, 4) },
-        { label: 'Weight per roll (lb)', value: fmt(result.weightPerRoll, 4) }
-      ];
-    } else if (type === 'pallet') {
-      const result = palletCalc(length, width, height, overhang, gaugeInput, gaugeUnit);
-      rows = [
-        { label: 'Bag width (in)', value: fmt(result.bagWidth, 2) },
-        { label: 'Bag length (in)', value: fmt(result.bagLength, 2) },
-        { label: 'Weight per bag (lb)', value: fmt(result.weightPerBag, 4) },
-        { label: 'Weight per 1,000 bags (lb)', value: fmt(result.weightPer1000, 4) }
-      ];
-    } else if (type === 'drum') {
-      const result = drumCalc(diameter, height, overhang, gaugeInput, gaugeUnit);
-      rows = [
-        { label: 'Bag width (in)', value: fmt(result.bagWidth, 2) },
-        { label: 'Bag length (in)', value: fmt(result.bagLength, 2) },
-        { label: 'Weight per bag (lb)', value: fmt(result.weightPerBag, 4) },
-        { label: 'Weight per 1,000 bags (lb)', value: fmt(result.weightPer1000, 4) }
-      ];
-    } else {
-      const result = bagsCalc(width, length, gaugeInput, gaugeUnit, count);
-      rows = [
-        { label: 'Gauge (mil)', value: fmt(result.gaugeMil, 4) },
-        { label: 'Gauge (decimal in)', value: fmt(result.gaugeDecimalIn, 6) },
-        { label: 'Weight per bag (lb)', value: fmt(result.weightPerBag, 4) },
-        { label: 'Weight per 1,000 bags (lb)', value: fmt(result.weightPer1000, 4) },
-        { label: 'Weight per roll/case (lb)', value: fmt(result.weightPerRoll, 4) }
-      ];
+  const panelConfigs = {
+    general: {
+      title: 'General Workbench',
+      noteTarget: 'generalNote',
+      compute: function () {
+        return formulas.generalCalc({
+          productType: byId('generalType').value,
+          width: byId('gWidth').value,
+          length: byId('gLength').value,
+          height: byId('gHeight').value,
+          diameter: byId('gDiameter').value,
+          footage: byId('gFootage').value,
+          count: byId('gCount').value,
+          overhang: byId('gOverhang').value,
+          slack: byId('gSlack').value,
+          gaugeInput: byId('gGauge').value,
+          gaugeUnit: byId('gGaugeUnit').value,
+          material: byId('gMaterial').value,
+          customDensity: byId('gCustomDensity').value
+        });
+      }
+    },
+    bags: {
+      title: 'Bags',
+      noteTarget: 'bagNote',
+      compute: function () {
+        return formulas.bagsCalc({
+          width: byId('bWidth').value,
+          length: byId('bLength').value,
+          count: byId('bCount').value,
+          gaugeInput: byId('bGauge').value,
+          gaugeUnit: byId('bGaugeUnit').value,
+          material: byId('bMaterial').value,
+          customDensity: byId('bCustomDensity').value
+        });
+      }
+    },
+    sheeting: {
+      title: 'Sheeting',
+      noteTarget: 'sheetingNote',
+      compute: function () {
+        return formulas.sheetingCalc({
+          width: byId('sWidth').value,
+          footage: byId('sFootage').value,
+          gaugeInput: byId('sGauge').value,
+          gaugeUnit: byId('sGaugeUnit').value,
+          material: byId('sMaterial').value,
+          customDensity: byId('sCustomDensity').value
+        });
+      }
+    },
+    tubing: {
+      title: 'Tubing',
+      noteTarget: 'tubingNote',
+      compute: function () {
+        return formulas.tubingCalc({
+          width: byId('tWidth').value,
+          footage: byId('tFootage').value,
+          gaugeInput: byId('tGauge').value,
+          gaugeUnit: byId('tGaugeUnit').value,
+          material: byId('tMaterial').value,
+          customDensity: byId('tCustomDensity').value
+        });
+      }
+    },
+    pallet: {
+      title: 'Pallet Cover',
+      noteTarget: 'palletNote',
+      compute: function () {
+        return formulas.palletCalc({
+          length: byId('pLength').value,
+          width: byId('pWidth').value,
+          height: byId('pHeight').value,
+          overhang: byId('pOverhang').value,
+          slack: byId('pSlack').value,
+          gaugeInput: byId('pGauge').value,
+          gaugeUnit: byId('pGaugeUnit').value,
+          material: byId('pMaterial').value,
+          customDensity: byId('pCustomDensity').value
+        });
+      }
+    },
+    drum: {
+      title: 'Drum Liner',
+      noteTarget: 'drumNote',
+      compute: function () {
+        return formulas.drumCalc({
+          diameter: byId('dDiameter').value,
+          height: byId('dHeight').value,
+          overhang: byId('dOverhang').value,
+          slack: byId('dSlack').value,
+          gaugeInput: byId('dGauge').value,
+          gaugeUnit: byId('dGaugeUnit').value,
+          material: byId('dMaterial').value,
+          customDensity: byId('dCustomDensity').value
+        });
+      }
+    },
+    conversions: {
+      title: 'Gauge Conversions',
+      noteTarget: 'conversionNote',
+      compute: function (changedField) {
+        const selectedUnit = changedField === 'cMicrons' ? 'microns' : changedField === 'cDecimal' ? 'decimal' : 'mil';
+        const selectedValue = changedField === 'cMicrons' ? byId('cMicrons').value : changedField === 'cDecimal' ? byId('cDecimal').value : byId('cMils').value;
+        return formulas.conversionsCalc({ value: selectedValue, unit: selectedUnit });
+      }
     }
+  };
 
-    writeResults(document.getElementById('generalResults'), rows);
+  let activePanel = 'general';
+
+  function setPanelNote(panelId, output) {
+    const target = byId(panelConfigs[panelId].noteTarget);
+    if (!target) {
+      return;
+    }
+    target.innerHTML = '<strong>Field note</strong>' + (output.note || NOTES[panelId]);
   }
 
-  function initTabs() {
-    const tabs = document.querySelectorAll('.tab');
-    const panels = document.querySelectorAll('.panel');
+  function renderRows(container, rows, digits) {
+    container.innerHTML = rows.map(function (row) {
+      const value = typeof row.value === 'number' ? fmt(row.value, digits[row.label] || 4) : row.value;
+      const unit = row.unit ? ' ' + row.unit : '';
+      const meta = row.meta ? '<small>' + row.meta + '</small>' : '';
+      return '<div class="result-row"><span>' + row.label + '</span><strong>' + value + unit + '</strong>' + meta + '</div>';
+    }).join('');
+  }
 
-    tabs.forEach(function (tab) {
-      tab.addEventListener('click', function () {
-        const tabId = tab.getAttribute('data-tab');
+  function assumptionRows(output) {
+    const assumptions = output.assumptions;
+    const rows = [];
 
-        tabs.forEach(function (item) {
-          item.classList.remove('active');
-        });
-        panels.forEach(function (panel) {
-          panel.classList.remove('active');
-        });
+    rows.push('<div class="assumption-row"><span>Material assumption used</span><strong>' + assumptions.materialLabel + '</strong></div>');
+    if (assumptions.densityGcc !== null) {
+      rows.push('<div class="assumption-row"><span>Density</span><strong>' + fmt(assumptions.densityGcc, 3) + ' g/cm3</strong><small>' + fmt(assumptions.densityLbIn3, 6) + ' lb/in3</small></div>');
+    }
+    rows.push('<div class="assumption-row"><span>Gauge</span><strong>' + fmt(assumptions.gauge.mil, 4) + ' mil</strong><small>' + fmt(assumptions.gauge.decimalIn, 6) + ' in / ' + fmt(assumptions.gauge.microns, 2) + ' microns</small></div>');
+    if (assumptions.extras && assumptions.extras.length) {
+      assumptions.extras.forEach(function (extra) {
+        const extraValue = typeof extra.value === 'number' ? fmt(extra.value, 3) : extra.value;
+        const unit = extra.unit ? ' ' + extra.unit : '';
+        rows.push('<div class="assumption-row"><span>' + extra.label + '</span><strong>' + extraValue + unit + '</strong></div>');
+      });
+    }
+    rows.push('<div class="assumption-row"><span>Method note</span><strong>' + assumptions.note + '</strong></div>');
 
-        tab.classList.add('active');
-        document.getElementById('panel-' + tabId).classList.add('active');
+    return rows.join('');
+  }
+
+  function syncConversionInputs(output) {
+    if (activePanel !== 'conversions') {
+      return;
+    }
+    byId('cMicrons').value = fmt(output.assumptions.gauge.microns, 2);
+    byId('cMils').value = fmt(output.assumptions.gauge.mil, 4);
+    byId('cDecimal').value = fmt(output.assumptions.gauge.decimalIn, 6);
+  }
+
+  function renderActivePanel(changedField) {
+    const output = panelConfigs[activePanel].compute(changedField);
+    const digits = {
+      'Weight per item': 4,
+      'Weight per 1,000': 2,
+      'Weight per roll / case': 4,
+      'Weight per roll': 4,
+      'Weight per 1,000 ft': 2,
+      'Weight per ft': 4,
+      'Effective film area': 2,
+      'Derived bag width': 2,
+      'Derived bag length': 2,
+      'Microns': 2,
+      'Mils': 4,
+      'Decimal inches': 6
+    };
+
+    resultKicker.textContent = panelConfigs[activePanel].title;
+    resultTitle.textContent = output.title;
+    renderRows(activeResults, output.results, digits);
+    activeAssumptions.innerHTML = assumptionRows(output);
+    standardsNote.textContent = output.note;
+    setPanelNote(activePanel, output);
+    syncConversionInputs(output);
+  }
+
+  function switchPanel(panelId) {
+    activePanel = panelId;
+    railButtons.forEach(function (button) {
+      button.classList.toggle('active', button.getAttribute('data-panel') === panelId);
+    });
+    panels.forEach(function (panel) {
+      panel.classList.toggle('active', panel.id === 'panel-' + panelId);
+    });
+    renderActivePanel();
+  }
+
+  function bindRail() {
+    railButtons.forEach(function (button) {
+      button.addEventListener('click', function () {
+        switchPanel(button.getAttribute('data-panel'));
       });
     });
   }
 
-  function bindLiveUpdates() {
+  function bindInputs() {
     document.querySelectorAll('input, select').forEach(function (element) {
       element.addEventListener('input', function (event) {
-        const id = event.target.id;
-
-        renderGeneral();
-        renderBags();
-        renderSheeting();
-        renderTubing();
-        renderPallet();
-        renderDrum();
-
-        if (id === 'cMicrons') {
-          renderConversions('microns');
-        } else if (id === 'cDecimal') {
-          renderConversions('decimal');
-        } else {
-          renderConversions('mils');
-        }
+        renderActivePanel(event.target.id);
+      });
+      element.addEventListener('change', function (event) {
+        renderActivePanel(event.target.id);
       });
     });
   }
 
-  initTabs();
-  bindLiveUpdates();
-  renderGeneral();
-  renderBags();
-  renderSheeting();
-  renderTubing();
-  renderPallet();
-  renderDrum();
-  renderConversions('mils');
+  function bindAdvancedToggles() {
+    document.querySelectorAll('.toggle-advanced').forEach(function (button) {
+      button.addEventListener('click', function () {
+        const target = byId(button.getAttribute('data-target'));
+        const hidden = target.hasAttribute('hidden');
+        if (hidden) {
+          target.removeAttribute('hidden');
+        } else {
+          target.setAttribute('hidden', 'hidden');
+        }
+        button.setAttribute('aria-expanded', hidden ? 'true' : 'false');
+      });
+    });
+  }
+
+  bindRail();
+  bindInputs();
+  bindAdvancedToggles();
+  renderActivePanel();
 })();

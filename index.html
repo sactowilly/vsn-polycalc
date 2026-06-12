@@ -1,179 +1,482 @@
 <!doctype html>
-<html class="no-js" lang="en">
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Polyethylene Weight Calculator</title>
-    <meta name="description" content="Mobile-friendly calculators for polyethylene bags, sheeting, tubing, pallet covers, and drum liners.">
+    <title>Polyethylene Weight Workbench</title>
+    <meta name="description" content="A field-manual style polyethylene film calculator for bags, sheeting, tubing, pallet covers, drum liners, and gauge conversions.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/main.css">
   </head>
   <body>
-    <main class="app">
-      <header class="app-header">
-        <h1>Polyethylene Weight Calculator</h1>
-        <p>Mobile calculators for bags, sheeting, tubing, pallet covers, and drum liners.</p>
+    <main class="shell">
+      <header class="masthead">
+        <div class="masthead-copy">
+          <p class="eyebrow">Vision Packaging / Poly Film Workbench</p>
+          <h1>Polyethylene <span class="tint">Weight</span> Calculator</h1>
+          <p class="lede">
+            Density-based film weight math with operational readouts for bags, tubing, sheeting,
+            pallet covers, and drum liners. Built as a field tool, not a generic form.
+          </p>
+          <p class="mantra">Theoretical film weight. Visible assumptions. Packaging-first geometry.</p>
+        </div>
+        <div class="masthead-meta">
+          <div>
+            <span class="meta-label">Default resin</span>
+            <strong>LDPE / LLDPE</strong>
+          </div>
+          <div>
+            <span class="meta-label">Default density</span>
+            <strong>0.920 g/cm3</strong>
+          </div>
+          <div>
+            <span class="meta-label">Validation</span>
+            <strong>Yield-table cross-check</strong>
+          </div>
+        </div>
       </header>
 
-      <nav class="tab-nav" aria-label="Calculator tabs">
-        <button class="tab active" data-tab="general">General</button>
-        <button class="tab" data-tab="bags">Bags</button>
-        <button class="tab" data-tab="sheeting">Sheeting</button>
-        <button class="tab" data-tab="tubing">Tubing</button>
-        <button class="tab" data-tab="pallet">Pallet Cover</button>
-        <button class="tab" data-tab="drum">Drum Liner</button>
-        <button class="tab" data-tab="conversions">Conversions</button>
-      </nav>
-
-      <section class="panel active" id="panel-general">
-        <h2>General Calculator</h2>
-        <p class="hint">Use this when you know dimensions (L/W/H), gauge, and either count per roll/case or overhang.</p>
-        <div class="grid">
-          <label>Product Type
-            <select id="generalType">
-              <option value="bags">Bag</option>
-              <option value="sheeting">Sheeting roll</option>
-              <option value="tubing">Tubing roll</option>
-              <option value="pallet">Pallet cover</option>
-              <option value="drum">Drum liner</option>
-            </select>
-          </label>
-          <label>Length (in)
-            <input id="gLength" type="number" inputmode="decimal" value="64">
-          </label>
-          <label>Width (in)
-            <input id="gWidth" type="number" inputmode="decimal" value="38">
-          </label>
-          <label>Height (in)
-            <input id="gHeight" type="number" inputmode="decimal" value="60">
-          </label>
-          <label>Diameter (in)
-            <input id="gDiameter" type="number" inputmode="decimal" value="24">
-          </label>
-          <label>Gauge Input
-            <input id="gGauge" type="number" inputmode="decimal" value="3">
-          </label>
-          <label>Gauge Unit
-            <select id="gGaugeUnit">
-              <option value="mil">mil</option>
-              <option value="decimal">decimal inch</option>
-              <option value="microns">microns</option>
-            </select>
-          </label>
-          <label>Footage (ft)
-            <input id="gFootage" type="number" inputmode="decimal" value="400">
-          </label>
-          <label>Count per roll/case
-            <input id="gCount" type="number" inputmode="decimal" value="100">
-          </label>
-          <label>Overhang (in)
-            <input id="gOverhang" type="number" inputmode="decimal" value="6">
-          </label>
-        </div>
-        <div class="results" id="generalResults"></div>
+      <section class="framework-band">
+        <article>
+          <p class="band-label">Method</p>
+          <h2>Volume x density</h2>
+          <p>All product weights are derived from film area, film thickness, and polyethylene density.</p>
+        </article>
+        <article>
+          <p class="band-label">Assumptions</p>
+          <h2>Visible by design</h2>
+          <p>Every calculation surfaces gauge conversions, material selection, density, and derived geometry.</p>
+        </article>
+        <article>
+          <p class="band-label">Field use</p>
+          <h2>Decision-ready outputs</h2>
+          <p>Results are framed for quoting and operations: per item, per 1,000, per roll, and derived bag sizing.</p>
+        </article>
       </section>
 
-      <section class="panel" id="panel-bags">
-        <h2>Bags Calculator</h2>
-        <div class="grid">
-          <label>Width (in)<input id="bWidth" type="number" value="38"></label>
-          <label>Length (in)<input id="bLength" type="number" value="64"></label>
-          <label>Gauge Input<input id="bGauge" type="number" value="0.003"></label>
-          <label>Gauge Unit
-            <select id="bGaugeUnit">
-              <option value="decimal">decimal inch</option>
-              <option value="mil">mil</option>
-              <option value="microns">microns</option>
-            </select>
-          </label>
-          <label>Count per roll (optional)<input id="bCount" type="number" value="100"></label>
-        </div>
-        <div class="results" id="bagResults"></div>
-      </section>
+      <section class="workbench">
+        <aside class="product-rail" aria-label="Calculator selector">
+          <p class="rail-label">Product Workbench</p>
+          <div class="product-list">
+            <button class="product-link active" data-panel="general" type="button">
+              <span class="product-code">01</span>
+              <span class="product-copy"><strong>General</strong><span>One screen for quick comparison.</span></span>
+            </button>
+            <button class="product-link" data-panel="bags" type="button">
+              <span class="product-code">02</span>
+              <span class="product-copy"><strong>Bags</strong><span>Flat bags, liners, and case counts.</span></span>
+            </button>
+            <button class="product-link" data-panel="sheeting" type="button">
+              <span class="product-code">03</span>
+              <span class="product-copy"><strong>Sheeting</strong><span>Single-ply roll coverage and weight.</span></span>
+            </button>
+            <button class="product-link" data-panel="tubing" type="button">
+              <span class="product-code">04</span>
+              <span class="product-copy"><strong>Tubing</strong><span>Layflat / double-wound film rolls.</span></span>
+            </button>
+            <button class="product-link" data-panel="pallet" type="button">
+              <span class="product-code">05</span>
+              <span class="product-copy"><strong>Pallet Cover</strong><span>Derived cover bag dimensions.</span></span>
+            </button>
+            <button class="product-link" data-panel="drum" type="button">
+              <span class="product-code">06</span>
+              <span class="product-copy"><strong>Drum Liner</strong><span>Derived circular bag geometry.</span></span>
+            </button>
+            <button class="product-link" data-panel="conversions" type="button">
+              <span class="product-code">07</span>
+              <span class="product-copy"><strong>Conversions</strong><span>Gauge, mil, micron, and decimal inch.</span></span>
+            </button>
+          </div>
+          <div class="rail-note">
+            <p class="rail-note-label">Field note</p>
+            <p>Use the product-specific screens when quoting. Use General when you need a fast comparison before drilling in.</p>
+          </div>
+        </aside>
 
-      <section class="panel" id="panel-sheeting">
-        <h2>Sheeting Calculator</h2>
-        <div class="grid">
-          <label>Width (in)<input id="sWidth" type="number" value="144"></label>
-          <label>Footage (ft)<input id="sFootage" type="number" value="400"></label>
-          <label>Gauge Input<input id="sGauge" type="number" value="1"></label>
-          <label>Gauge Unit
-            <select id="sGaugeUnit">
-              <option value="mil">mil</option>
-              <option value="decimal">decimal inch</option>
-              <option value="microns">microns</option>
-            </select>
-          </label>
-        </div>
-        <div class="results" id="sheetingResults"></div>
-      </section>
+        <section class="main-stage">
+          <div class="calculator-stack">
+            <section class="panel active" id="panel-general" data-result-target="generalResults" data-note-target="generalNote">
+              <header class="panel-header">
+                <p class="panel-kicker">Quick compare</p>
+                <h2>General Workbench</h2>
+                <p class="panel-intro">Choose the product, enter the geometry, and use the sticky result panel to inspect derived dimensions and film assumptions.</p>
+              </header>
+              <div class="panel-grid">
+                <label>Product Type
+                  <select id="generalType">
+                    <option value="bags">Bag</option>
+                    <option value="sheeting">Sheeting roll</option>
+                    <option value="tubing">Tubing roll</option>
+                    <option value="pallet">Pallet cover</option>
+                    <option value="drum">Drum liner</option>
+                  </select>
+                </label>
+                <label>Width / Layflat Width (in)
+                  <input id="gWidth" type="number" inputmode="decimal" value="38">
+                </label>
+                <label>Length (in)
+                  <input id="gLength" type="number" inputmode="decimal" value="64">
+                </label>
+                <label>Height (in)
+                  <input id="gHeight" type="number" inputmode="decimal" value="60">
+                </label>
+                <label>Diameter (in)
+                  <input id="gDiameter" type="number" inputmode="decimal" value="24">
+                </label>
+                <label>Footage (ft)
+                  <input id="gFootage" type="number" inputmode="decimal" value="400">
+                </label>
+                <label>Count per roll / case
+                  <input id="gCount" type="number" inputmode="decimal" value="100">
+                </label>
+                <label>Overhang / Top Allowance (in)
+                  <input id="gOverhang" type="number" inputmode="decimal" value="6">
+                </label>
+                <label>Seal / Slack Allowance (in)
+                  <input id="gSlack" type="number" inputmode="decimal" value="4">
+                </label>
+              </div>
+              <fieldset class="assumption-block">
+                <legend>Film Assumptions</legend>
+                <div class="panel-grid assumption-grid">
+                  <label>Gauge Input
+                    <input id="gGauge" type="number" inputmode="decimal" value="3">
+                  </label>
+                  <label>Gauge Unit
+                    <select id="gGaugeUnit">
+                      <option value="mil">mil</option>
+                      <option value="decimal">decimal inch</option>
+                      <option value="microns">microns</option>
+                    </select>
+                  </label>
+                  <label>Material Preset
+                    <select id="gMaterial">
+                      <option value="LDPE">LDPE</option>
+                      <option value="LLDPE">LLDPE</option>
+                      <option value="MDPE">MDPE</option>
+                      <option value="HDPE">HDPE</option>
+                      <option value="CUSTOM">Custom density</option>
+                    </select>
+                  </label>
+                  <label>Custom Density (g/cm3)
+                    <input id="gCustomDensity" type="number" inputmode="decimal" step="0.001" value="0.920">
+                  </label>
+                </div>
+                <button class="toggle-advanced" data-target="generalAdvanced" type="button">Advanced assumptions</button>
+                <div class="advanced-panel" id="generalAdvanced" hidden>
+                  <p>General uses density-derived film weight. Custom density overrides the preset only when the material is set to Custom density.</p>
+                </div>
+              </fieldset>
+              <div class="field-note" id="generalNote"></div>
+            </section>
 
-      <section class="panel" id="panel-tubing">
-        <h2>Tubing Calculator</h2>
-        <div class="grid">
-          <label>Width (in)<input id="tWidth" type="number" value="36"></label>
-          <label>Footage (ft)<input id="tFootage" type="number" value="800"></label>
-          <label>Gauge Input<input id="tGauge" type="number" value="3"></label>
-          <label>Gauge Unit
-            <select id="tGaugeUnit">
-              <option value="mil">mil</option>
-              <option value="decimal">decimal inch</option>
-              <option value="microns">microns</option>
-            </select>
-          </label>
-        </div>
-        <div class="results" id="tubingResults"></div>
-      </section>
+            <section class="panel" id="panel-bags" data-result-target="bagResults" data-note-target="bagNote">
+              <header class="panel-header">
+                <p class="panel-kicker">Product-specific</p>
+                <h2>Bags</h2>
+                <p class="panel-intro">Uses a double-wall film area model: 2 x width x length x thickness x density.</p>
+              </header>
+              <div class="panel-grid">
+                <label>Bag Width (in)
+                  <input id="bWidth" type="number" inputmode="decimal" value="38">
+                </label>
+                <label>Bag Length (in)
+                  <input id="bLength" type="number" inputmode="decimal" value="64">
+                </label>
+                <label>Count per roll / case
+                  <input id="bCount" type="number" inputmode="decimal" value="100">
+                </label>
+              </div>
+              <fieldset class="assumption-block">
+                <legend>Film Assumptions</legend>
+                <div class="panel-grid assumption-grid">
+                  <label>Gauge Input
+                    <input id="bGauge" type="number" inputmode="decimal" value="3">
+                  </label>
+                  <label>Gauge Unit
+                    <select id="bGaugeUnit">
+                      <option value="mil">mil</option>
+                      <option value="decimal">decimal inch</option>
+                      <option value="microns">microns</option>
+                    </select>
+                  </label>
+                  <label>Material Preset
+                    <select id="bMaterial">
+                      <option value="LDPE">LDPE</option>
+                      <option value="LLDPE">LLDPE</option>
+                      <option value="MDPE">MDPE</option>
+                      <option value="HDPE">HDPE</option>
+                      <option value="CUSTOM">Custom density</option>
+                    </select>
+                  </label>
+                  <label>Custom Density (g/cm3)
+                    <input id="bCustomDensity" type="number" inputmode="decimal" step="0.001" value="0.920">
+                  </label>
+                </div>
+                <button class="toggle-advanced" data-target="bagsAdvanced" type="button">Advanced assumptions</button>
+                <div class="advanced-panel" id="bagsAdvanced" hidden>
+                  <p>Bag weight reflects theoretical film only. Seals, perforations, and additive packages are excluded.</p>
+                </div>
+              </fieldset>
+              <div class="field-note" id="bagNote"></div>
+            </section>
 
-      <section class="panel" id="panel-pallet">
-        <h2>Pallet Cover Calculator</h2>
-        <div class="grid">
-          <label>Pallet Length (in)<input id="pLength" type="number" value="48"></label>
-          <label>Pallet Width (in)<input id="pWidth" type="number" value="40"></label>
-          <label>Pallet Height (in)<input id="pHeight" type="number" value="60"></label>
-          <label>Overhang (in)<input id="pOverhang" type="number" value="6"></label>
-          <label>Gauge Input<input id="pGauge" type="number" value="2"></label>
-          <label>Gauge Unit
-            <select id="pGaugeUnit">
-              <option value="mil">mil</option>
-              <option value="decimal">decimal inch</option>
-              <option value="microns">microns</option>
-            </select>
-          </label>
-        </div>
-        <div class="results" id="palletResults"></div>
-      </section>
+            <section class="panel" id="panel-sheeting" data-result-target="sheetingResults" data-note-target="sheetingNote">
+              <header class="panel-header">
+                <p class="panel-kicker">Roll stock</p>
+                <h2>Sheeting</h2>
+                <p class="panel-intro">Uses a single-ply area model: width x lineal footage x thickness x density.</p>
+              </header>
+              <div class="panel-grid">
+                <label>Sheet Width (in)
+                  <input id="sWidth" type="number" inputmode="decimal" value="144">
+                </label>
+                <label>Footage (ft)
+                  <input id="sFootage" type="number" inputmode="decimal" value="400">
+                </label>
+              </div>
+              <fieldset class="assumption-block">
+                <legend>Film Assumptions</legend>
+                <div class="panel-grid assumption-grid">
+                  <label>Gauge Input
+                    <input id="sGauge" type="number" inputmode="decimal" value="1">
+                  </label>
+                  <label>Gauge Unit
+                    <select id="sGaugeUnit">
+                      <option value="mil">mil</option>
+                      <option value="decimal">decimal inch</option>
+                      <option value="microns">microns</option>
+                    </select>
+                  </label>
+                  <label>Material Preset
+                    <select id="sMaterial">
+                      <option value="LDPE">LDPE</option>
+                      <option value="LLDPE">LLDPE</option>
+                      <option value="MDPE">MDPE</option>
+                      <option value="HDPE">HDPE</option>
+                      <option value="CUSTOM">Custom density</option>
+                    </select>
+                  </label>
+                  <label>Custom Density (g/cm3)
+                    <input id="sCustomDensity" type="number" inputmode="decimal" step="0.001" value="0.920">
+                  </label>
+                </div>
+                <button class="toggle-advanced" data-target="sheetingAdvanced" type="button">Advanced assumptions</button>
+                <div class="advanced-panel" id="sheetingAdvanced" hidden>
+                  <p>Result panel includes pounds per 1,000 ft so it can be compared to legacy shorthand yield charts.</p>
+                </div>
+              </fieldset>
+              <div class="field-note" id="sheetingNote"></div>
+            </section>
 
-      <section class="panel" id="panel-drum">
-        <h2>Drum Liner Calculator</h2>
-        <div class="grid">
-          <label>Drum Diameter (in)<input id="dDiameter" type="number" value="24"></label>
-          <label>Drum Height (in)<input id="dHeight" type="number" value="40"></label>
-          <label>Overhang (in)<input id="dOverhang" type="number" value="6"></label>
-          <label>Gauge Input<input id="dGauge" type="number" value="2"></label>
-          <label>Gauge Unit
-            <select id="dGaugeUnit">
-              <option value="mil">mil</option>
-              <option value="decimal">decimal inch</option>
-              <option value="microns">microns</option>
-            </select>
-          </label>
-        </div>
-        <div class="results" id="drumResults"></div>
-      </section>
+            <section class="panel" id="panel-tubing" data-result-target="tubingResults" data-note-target="tubingNote">
+              <header class="panel-header">
+                <p class="panel-kicker">Roll stock</p>
+                <h2>Tubing</h2>
+                <p class="panel-intro">Uses double-wall area for layflat tubing: 2 x layflat width x footage x thickness x density.</p>
+              </header>
+              <div class="panel-grid">
+                <label>Layflat Width (in)
+                  <input id="tWidth" type="number" inputmode="decimal" value="36">
+                </label>
+                <label>Footage (ft)
+                  <input id="tFootage" type="number" inputmode="decimal" value="800">
+                </label>
+              </div>
+              <fieldset class="assumption-block">
+                <legend>Film Assumptions</legend>
+                <div class="panel-grid assumption-grid">
+                  <label>Gauge Input
+                    <input id="tGauge" type="number" inputmode="decimal" value="3">
+                  </label>
+                  <label>Gauge Unit
+                    <select id="tGaugeUnit">
+                      <option value="mil">mil</option>
+                      <option value="decimal">decimal inch</option>
+                      <option value="microns">microns</option>
+                    </select>
+                  </label>
+                  <label>Material Preset
+                    <select id="tMaterial">
+                      <option value="LDPE">LDPE</option>
+                      <option value="LLDPE">LLDPE</option>
+                      <option value="MDPE">MDPE</option>
+                      <option value="HDPE">HDPE</option>
+                      <option value="CUSTOM">Custom density</option>
+                    </select>
+                  </label>
+                  <label>Custom Density (g/cm3)
+                    <input id="tCustomDensity" type="number" inputmode="decimal" step="0.001" value="0.920">
+                  </label>
+                </div>
+                <button class="toggle-advanced" data-target="tubingAdvanced" type="button">Advanced assumptions</button>
+                <div class="advanced-panel" id="tubingAdvanced" hidden>
+                  <p>Layflat tubing is modeled as a double-wall tube. The result panel also shows pounds per 1,000 ft for legacy chart comparison.</p>
+                </div>
+              </fieldset>
+              <div class="field-note" id="tubingNote"></div>
+            </section>
 
-      <section class="panel" id="panel-conversions">
-        <h2>Gauge Conversions</h2>
-        <div class="grid">
-          <label>Microns<input id="cMicrons" type="number" value="12"></label>
-          <label>Mils<input id="cMils" type="number" value="0.47"></label>
-          <label>Decimal inches<input id="cDecimal" type="number" value="0.003"></label>
-        </div>
-        <div class="results" id="conversionResults"></div>
+            <section class="panel" id="panel-pallet" data-result-target="palletResults" data-note-target="palletNote">
+              <header class="panel-header">
+                <p class="panel-kicker">Derived geometry</p>
+                <h2>Pallet Cover</h2>
+                <p class="panel-intro">Derives a bag width and bag length first, then calculates the theoretical bag weight from that geometry.</p>
+              </header>
+              <div class="panel-grid">
+                <label>Pallet Length (in)
+                  <input id="pLength" type="number" inputmode="decimal" value="48">
+                </label>
+                <label>Pallet Width (in)
+                  <input id="pWidth" type="number" inputmode="decimal" value="40">
+                </label>
+                <label>Pallet Height (in)
+                  <input id="pHeight" type="number" inputmode="decimal" value="60">
+                </label>
+                <label>Top Overhang (in)
+                  <input id="pOverhang" type="number" inputmode="decimal" value="6">
+                </label>
+                <label>Seal / Slack Allowance (in)
+                  <input id="pSlack" type="number" inputmode="decimal" value="4">
+                </label>
+              </div>
+              <fieldset class="assumption-block">
+                <legend>Film Assumptions</legend>
+                <div class="panel-grid assumption-grid">
+                  <label>Gauge Input
+                    <input id="pGauge" type="number" inputmode="decimal" value="2">
+                  </label>
+                  <label>Gauge Unit
+                    <select id="pGaugeUnit">
+                      <option value="mil">mil</option>
+                      <option value="decimal">decimal inch</option>
+                      <option value="microns">microns</option>
+                    </select>
+                  </label>
+                  <label>Material Preset
+                    <select id="pMaterial">
+                      <option value="LDPE">LDPE</option>
+                      <option value="LLDPE">LLDPE</option>
+                      <option value="MDPE">MDPE</option>
+                      <option value="HDPE">HDPE</option>
+                      <option value="CUSTOM">Custom density</option>
+                    </select>
+                  </label>
+                  <label>Custom Density (g/cm3)
+                    <input id="pCustomDensity" type="number" inputmode="decimal" step="0.001" value="0.920">
+                  </label>
+                </div>
+                <button class="toggle-advanced" data-target="palletAdvanced" type="button">Advanced assumptions</button>
+                <div class="advanced-panel" id="palletAdvanced" hidden>
+                  <p>Derived bag width = pallet length + pallet width + slack. Derived bag length = pallet height + half pallet width + overhang.</p>
+                </div>
+              </fieldset>
+              <div class="field-note" id="palletNote"></div>
+            </section>
+
+            <section class="panel" id="panel-drum" data-result-target="drumResults" data-note-target="drumNote">
+              <header class="panel-header">
+                <p class="panel-kicker">Derived geometry</p>
+                <h2>Drum Liner</h2>
+                <p class="panel-intro">Derives bag geometry from drum circumference, top allowance, and seal slack before calculating theoretical weight.</p>
+              </header>
+              <div class="panel-grid">
+                <label>Drum Diameter (in)
+                  <input id="dDiameter" type="number" inputmode="decimal" value="24">
+                </label>
+                <label>Drum Height (in)
+                  <input id="dHeight" type="number" inputmode="decimal" value="40">
+                </label>
+                <label>Top Overhang (in)
+                  <input id="dOverhang" type="number" inputmode="decimal" value="6">
+                </label>
+                <label>Seal / Slack Allowance (in)
+                  <input id="dSlack" type="number" inputmode="decimal" value="4">
+                </label>
+              </div>
+              <fieldset class="assumption-block">
+                <legend>Film Assumptions</legend>
+                <div class="panel-grid assumption-grid">
+                  <label>Gauge Input
+                    <input id="dGauge" type="number" inputmode="decimal" value="2">
+                  </label>
+                  <label>Gauge Unit
+                    <select id="dGaugeUnit">
+                      <option value="mil">mil</option>
+                      <option value="decimal">decimal inch</option>
+                      <option value="microns">microns</option>
+                    </select>
+                  </label>
+                  <label>Material Preset
+                    <select id="dMaterial">
+                      <option value="LDPE">LDPE</option>
+                      <option value="LLDPE">LLDPE</option>
+                      <option value="MDPE">MDPE</option>
+                      <option value="HDPE">HDPE</option>
+                      <option value="CUSTOM">Custom density</option>
+                    </select>
+                  </label>
+                  <label>Custom Density (g/cm3)
+                    <input id="dCustomDensity" type="number" inputmode="decimal" step="0.001" value="0.920">
+                  </label>
+                </div>
+                <button class="toggle-advanced" data-target="drumAdvanced" type="button">Advanced assumptions</button>
+                <div class="advanced-panel" id="drumAdvanced" hidden>
+                  <p>Derived bag width = drum circumference plus slack. Derived bag length = drum height + drum radius + overhang.</p>
+                </div>
+              </fieldset>
+              <div class="field-note" id="drumNote"></div>
+            </section>
+
+            <section class="panel" id="panel-conversions" data-result-target="conversionResults" data-note-target="conversionNote">
+              <header class="panel-header">
+                <p class="panel-kicker">Reference tool</p>
+                <h2>Gauge Conversions</h2>
+                <p class="panel-intro">Use any one field. The other two update immediately and the result panel shows the conversion rules in plain language.</p>
+              </header>
+              <div class="panel-grid">
+                <label>Microns
+                  <input id="cMicrons" type="number" inputmode="decimal" value="25.4">
+                </label>
+                <label>Mils
+                  <input id="cMils" type="number" inputmode="decimal" value="1">
+                </label>
+                <label>Decimal inches
+                  <input id="cDecimal" type="number" inputmode="decimal" value="0.001">
+                </label>
+              </div>
+              <div class="field-note" id="conversionNote"></div>
+            </section>
+          </div>
+
+          <aside class="result-rail">
+            <div class="result-card">
+              <p class="result-kicker" id="resultKicker">General Workbench</p>
+              <h2 id="resultTitle">Operational Results</h2>
+              <div class="result-list" id="activeResults"></div>
+            </div>
+            <div class="result-card assumptions-card">
+              <p class="result-kicker">Assumptions</p>
+              <div class="assumption-list" id="activeAssumptions"></div>
+            </div>
+            <div class="result-card standards-card">
+              <p class="result-kicker">Standards Note</p>
+              <p id="standardsNote">Theoretical weight is based on geometry and polyethylene density, then cross-checked against common film yield references.</p>
+              <ul class="standards-list">
+                <li>Primary method: area x thickness x density</li>
+                <li>Legacy charts used as sanity checks only</li>
+                <li>Results exclude seals, additives, and process variation unless manually adjusted</li>
+              </ul>
+            </div>
+          </aside>
+        </section>
       </section>
     </main>
 
+    <script src="js/formulas.js"></script>
     <script src="js/main.js"></script>
   </body>
 </html>
